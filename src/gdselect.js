@@ -47,11 +47,16 @@ class GDSelect {
   
       // Input búsqueda
       if (this.config.search) {
+        const searchContainer = document.createElement('div');
+        searchContainer.classList.add('gdselect-search-container');
+
         this.searchInput = document.createElement('input');
         this.searchInput.type = 'text';
         this.searchInput.classList.add('gdselect-search');
-        this.searchInput.placeholder = '';
-        this.dropdown.appendChild(this.searchInput);
+        this.searchInput.placeholder = 'Buscar...';
+
+        searchContainer.appendChild(this.searchInput);
+        this.dropdown.appendChild(searchContainer);
       }
   
       // Opciones

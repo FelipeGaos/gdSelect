@@ -13,6 +13,8 @@ class GDSelect {
   
       this.build();
       this.bindEvents();
+      this.observeClassChanges();
+      this.setupValidationObserver();
     }
   
     build() {
@@ -45,11 +47,16 @@ class GDSelect {
   
       // Input búsqueda
       if (this.config.search) {
+        const searchContainer = document.createElement('div');
+        searchContainer.classList.add('gdselect-search-container');
+
         this.searchInput = document.createElement('input');
         this.searchInput.type = 'text';
         this.searchInput.classList.add('gdselect-search');
-        this.searchInput.placeholder = '';
-        this.dropdown.appendChild(this.searchInput);
+        this.searchInput.placeholder = 'Buscar...';
+
+        searchContainer.appendChild(this.searchInput);
+        this.dropdown.appendChild(searchContainer);
       }
   
       // Opciones
@@ -71,6 +78,96 @@ class GDSelect {
       
       // Actualizar el header con los valores seleccionados inicialmente
       this.updateHeader();
+    }
+  
+    // Observar cambios en las clases del select original
+    observeClassChanges() {
+      // Crear un observador de mutaciones para detectar cambios en las clases
+      this.observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            // Obtener las clases actuales del select
+            const currentClasses = this.select.className.split(' ');
+            
+            // Obtener las clases actuales del wrapper
+            const wrapperClasses = Array.from(this.wrapper.classList);
+            
+            // Eliminar clases que ya no están en el select
+            wrapperClasses.forEach(className => {
+              if (className !== 'gdselect-wrapper' && !currentClasses.includes(className)) {
+                this.wrapper.classList.remove(className);
+              }
+            });
+            
+            // Agregar nuevas clases del select al wrapper
+            currentClasses.forEach(className => {
+              if (className && !this.wrapper.classList.contains(className)) {
+                this.wrapper.classList.add(className);
+              }
+            });
+          }
+        });
+      });
+      
+      // Configurar y iniciar el observador
+      this.observer.observe(this.select, { 
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+    
+    // Configurar el observador de validación
+    setupValidationObserver() {
+      // Observar el formulario padre para detectar cuando se agrega la clase was-validated
+      let form = this.select.closest('form');
+      if (form) {
+        // Observar cambios en las clases del formulario
+        const formObserver = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              // Verificar si el formulario tiene la clase was-validated
+              if (form.classList.contains('was-validated')) {
+                this.updateValidationState();
+              }
+            }
+          });
+        });
+        
+        // Configurar y iniciar el observador del formulario
+        formObserver.observe(form, { 
+          attributes: true,
+          attributeFilter: ['class']
+        });
+        
+        // También observar el evento submit del formulario
+        form.addEventListener('submit', () => {
+          // Actualizar el estado de validación después de un breve retraso
+          // para permitir que Bootstrap agregue la clase was-validated
+          setTimeout(() => this.updateValidationState(), 0);
+        });
+      }
+      
+      // También observar cambios en el valor del select
+      this.select.addEventListener('change', () => {
+        if (form && form.classList.contains('was-validated')) {
+          this.updateValidationState();
+        }
+      });
+    }
+    
+    // Actualizar el estado de validación
+    updateValidationState() {
+      // Verificar si el select es válido
+      const isValid = this.select.checkValidity();
+      
+      // Actualizar las clases del wrapper
+      if (isValid) {
+        this.wrapper.classList.remove('is-invalid');
+        this.wrapper.classList.add('is-valid');
+      } else {
+        this.wrapper.classList.remove('is-valid');
+        this.wrapper.classList.add('is-invalid');
+      }
     }
   
     bindEvents() {
@@ -136,6 +233,9 @@ class GDSelect {
   
       this.updateHeader();
       this.syncSelect();
+      
+      // Actualizar el estado de validación después de cambiar el valor
+      this.updateValidationState();
     }
   
     updateHeader() {
@@ -167,6 +267,9 @@ class GDSelect {
       });
       this.updateHeader();
       this.syncSelect();
+      
+      // Actualizar el estado de validación después de establecer el valor
+      this.updateValidationState();
     }
   
     getValue() {
