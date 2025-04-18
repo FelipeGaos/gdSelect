@@ -48,11 +48,18 @@ class GDSelect {
         item.dataset.value = opt.value;
         item.textContent = opt.textContent;
         if (opt.disabled) item.classList.add('disabled');
+        if (opt.selected) {
+          item.classList.add('selected');
+          this.selectedValues.add(opt.value);
+        }
         this.dropdown.appendChild(item);
       });
   
       this.wrapper.appendChild(this.dropdown);
       this.select.parentNode.insertBefore(this.wrapper, this.select.nextSibling);
+      
+      // Actualizar el header con los valores seleccionados inicialmente
+      this.updateHeader();
     }
   
     bindEvents() {
