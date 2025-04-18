@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDSelect - Demo</title>
+    <link rel="stylesheet" href="styles/gdselect.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .demo-container {
+            margin: 20px 0;
+        }
+        .demo-container select {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GDSelect - Demo</h1>
+    <p>Una librería de select personalizado con búsqueda y selección múltiple.</p>
+
+    <div class="demo-section">
+        <h2>Select Básico</h2>
+        <div class="demo-container">
+            <select id="basic-select">
+                <option value="">Seleccione una opción</option>
+                <option value="1">Opción 1</option>
+                <option value="2">Opción 2</option>
+                <option value="3">Opción 3</option>
+                <option value="4">Opción 4</option>
+                <option value="5">Opción 5</option>
+            </select>
+        </div>
+        <div class="code-block">
+            <pre><code>const basicSelect = new GDSelect('#basic-select', {
+    placeholder: 'Seleccione una opción',
+    search: true
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Select Múltiple</h2>
+        <div class="demo-container">
+            <select id="multiple-select" multiple>
+                <option value="1">Opción A</option>
+                <option value="2">Opción B</option>
+                <option value="3">Opción C</option>
+                <option value="4">Opción D</option>
+                <option value="5">Opción E</option>
+            </select>
+        </div>
+        <div class="code-block">
+            <pre><code>const multipleSelect = new GDSelect('#multiple-select', {
+    placeholder: 'Seleccione múltiples opciones',
+    search: true,
+    multiple: true
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Select con Opciones Deshabilitadas</h2>
+        <div class="demo-container">
+            <select id="disabled-select">
+                <option value="1">Opción 1</option>
+                <option value="2" disabled>Opción 2 (Deshabilitada)</option>
+                <option value="3">Opción 3</option>
+                <option value="4" disabled>Opción 4 (Deshabilitada)</option>
+                <option value="5">Opción 5</option>
+            </select>
+        </div>
+        <div class="code-block">
+            <pre><code>const disabledSelect = new GDSelect('#disabled-select', {
+    placeholder: 'Seleccione una opción',
+    search: true
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Métodos de la API</h2>
+        <div class="demo-container">
+            <select id="api-select">
+                <option value="1">Opción 1</option>
+                <option value="2">Opción 2</option>
+                <option value="3">Opción 3</option>
+            </select>
+            <div style="margin-top: 10px;">
+                <button onclick="setValue()">Establecer Valor</button>
+                <button onclick="getValue()">Obtener Valor</button>
+            </div>
+        </div>
+        <div class="code-block">
+            <pre><code>const apiSelect = new GDSelect('#api-select', {
+    placeholder: 'Seleccione una opción',
+    search: true
+});
+
+// Establecer valor
+apiSelect.setValue('2');
+
+// Obtener valor
+const value = apiSelect.getValue();</code></pre>
+        </div>
+    </div>
+
+    <script src="src/gdselect.js"></script>
+    <script>
+        // Inicialización de los selects
+        const basicSelect = new GDSelect('#basic-select', {
+            placeholder: 'Seleccione una opción',
+            search: true
+        });
+
+        const multipleSelect = new GDSelect('#multiple-select', {
+            placeholder: 'Seleccione múltiples opciones',
+            search: true,
+            multiple: true
+        });
+
+        const disabledSelect = new GDSelect('#disabled-select', {
+            placeholder: 'Seleccione una opción',
+            search: true
+        });
+
+        const apiSelect = new GDSelect('#api-select', {
+            placeholder: 'Seleccione una opción',
+            search: true
+        });
+
+        // Funciones para demostrar la API
+        function setValue() {
+            apiSelect.setValue('2');
+        }
+
+        function getValue() {
+            const value = apiSelect.getValue();
+            alert('Valor seleccionado: ' + value);
+        }
+    </script>
+</body>
+</html>
