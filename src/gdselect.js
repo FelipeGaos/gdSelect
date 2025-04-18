@@ -4,7 +4,7 @@ class GDSelect {
       this.config = Object.assign({
         search: true,
         placeholder: 'Seleccione...',
-        multiple: this.select.hasAttribute('multiple'), // ahora se puede forzar
+        multiple: this.select.hasAttribute('multiple'),
         multipleSelectedText: 'opciones seleccionadas'
       }, config);
   
@@ -120,7 +120,7 @@ class GDSelect {
         this.selectedValues.add(value);
         this.dropdown.querySelectorAll('.gdselect-option').forEach(opt => opt.classList.remove('selected'));
         optionEl.classList.add('selected');
-        this.dropdown.classList.remove('open'); // cierra al seleccionar
+        this.dropdown.classList.remove('open');
       }
   
       this.updateHeader();
@@ -161,13 +161,4 @@ class GDSelect {
     getValue() {
       return this.multiple ? [...this.selectedValues] : [...this.selectedValues][0] || null;
     }
-  }
-  
-  const gdSingle = new GDSelect('#mi-select', {
-    placeholder: 'Buscar destino'
-  });
-  
-  const gd = new GDSelect('#mi-select-multiple', {
-    search: true, // o false para ocultar buscador
-    placeholder: 'Buscar destinos...',
-  });
+} 
