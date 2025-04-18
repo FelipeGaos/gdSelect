@@ -20,6 +20,17 @@ class GDSelect {
   
       this.wrapper = document.createElement('div');
       this.wrapper.classList.add('gdselect-wrapper');
+      
+      // Transferir las clases del select original al wrapper
+      if (this.select.className) {
+        const originalClasses = this.select.className.split(' ');
+        originalClasses.forEach(className => {
+          if (className && !this.wrapper.classList.contains(className)) {
+            this.wrapper.classList.add(className);
+          }
+        });
+      }
+      
       this.wrapper.tabIndex = 0;
   
       // Header
